@@ -167,6 +167,11 @@ static void SetupDPIScale()
     LoadFonts( scale );
 
 #ifdef __APPLE__
+    // On macOS, GLFW returns framebuffer size in pixels but ImGui works in points.
+    // Fonts are loaded at the detected DPI scale, so we need to downscale them
+    // to avoid oversized text. UI element scaling is handled by the system.
+    ImGuiIO& io = ImGui::GetIO();
+    io.FontGlobalScale = 1.0f / dpiScale;
     scale = 1.0f;
 #endif
 
